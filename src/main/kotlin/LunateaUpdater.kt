@@ -6,10 +6,6 @@ import com.alibaba.fastjson2.toJSONString
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
 import org.apache.commons.codec.digest.DigestUtils
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.Font
-import java.awt.Rectangle
 import java.io.File
 import java.net.URI
 import java.net.http.HttpClient
@@ -18,7 +14,10 @@ import java.net.http.HttpResponse
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
-import javax.swing.*
+import javax.swing.JFrame
+import javax.swing.JLabel
+import javax.swing.JScrollPane
+import javax.swing.SwingUtilities
 import kotlin.system.exitProcess
 
 /*
@@ -49,7 +48,6 @@ fun main(args: Array<String>) = mainBody {
         Lunatea Updater by KLONOA9X6 & KLuoNuoYa
         -----------------------------------------
     """.trimIndent(), true)
-    val executorService = Executors.newFixedThreadPool(4)
     if (args.isEmpty()) {
         outputConsole("No arguments provided", true)
         outputConsole("Use -h or --help for help", true)
@@ -57,6 +55,7 @@ fun main(args: Array<String>) = mainBody {
     }
     val parserArgs = ArgParser(args).parseInto(::ArgHelper)
     parserArgs.run {
+        val executorService = Executors.newFixedThreadPool(thread)
         SwingUtilities.invokeLater {
             JFrameInit()    //初始化GUI
             if (!silent) {
