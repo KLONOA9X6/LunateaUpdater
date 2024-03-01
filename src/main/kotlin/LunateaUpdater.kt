@@ -42,7 +42,6 @@ fun outputConsole(text: String, toConsole: Boolean){
 }
 
 fun main(args: Array<String>) = mainBody {
-    //println("Lunatea Updater by KLONOA9X6 & KLuoNuoYa")
     outputConsole("""
         -----------------------------------------
         Lunatea Updater by KLONOA9X6 & KLuoNuoYa
@@ -121,8 +120,10 @@ $packDescription
         TimeUnit.SECONDS.sleep(2)
         if (!silent) {
             JFrameInit.frameFadeOut()
+            frame.dispose()
+        } else {
+            exitProcess(0)
         }
-        frame.dispose()
     }
 }
 
@@ -130,14 +131,13 @@ fun asyncFilesCheck(file: Any, gamePath: String, updateUrl: String) : Boolean {
     val serverFilePath = file.toJSONString().parseObject()["path"].toString()
     val serverFileHash = file.toJSONString().parseObject()["hash"].toString()
     val clientFile = File("$gamePath/$serverFilePath")
-    return checkClientFile(clientFile, serverFilePath, serverFileHash, gamePath, updateUrl)
+    return checkClientFile(clientFile, serverFilePath, serverFileHash, updateUrl)
 }
 
 fun checkClientFile(
     clientFile: File,
     serverFilePath: String,
     serverFileHash: String,
-    gamePath: String,
     updateUrl: String
 ): Boolean {
     if (clientFile.exists()) {

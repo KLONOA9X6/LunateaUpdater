@@ -18,7 +18,7 @@ object JFrameInit {
         labelBackGround.size = frame.preferredSize
         //labelLogger.bounds = Rectangle(50, 50, 752, 500)    // 这里改日志显示的区域
         labelLogger.bounds = Rectangle(50, 355, 752, 195)
-        labelLogger.font = Font("Consolas", Font.BOLD, 12)
+        labelLogger.font = Font("Consolas", Font.PLAIN, 12)
         labelLogger.foreground = Color(255,255,255)
         labelLogger.background = Color(0,0,0,0)
         labelLogger.horizontalAlignment = SwingConstants.LEFT
