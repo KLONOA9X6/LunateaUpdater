@@ -67,8 +67,35 @@ fun main(args: Array<String>) = mainBody {
         val request = HttpRequest.newBuilder()
             .uri(URI.create("$updateUrl/server-manifest.json"))
             .build()
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-        val manifestJson = response.body().toString()
+        var response: HttpResponse<String>? = null
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString())
+        } catch (e: Exception) {
+            outputConsole("""
+                -------------------------------------------------
+                A error occurred during request data from server.
+                Program will exit without file checking...
+                -------------------------------------------------
+                Error: ${e.message}
+            """.trimIndent(),true)
+            TimeUnit.SECONDS.sleep(2)
+            fadeOutExit(1,silent)
+        }
+        val statusCode = response?.statusCode()
+        if (statusCode != null) {
+            if (statusCode >= 400) {
+                outputConsole("""
+                    -------------------------------------------------
+                    A error occurred during request data from server.
+                    Program will exit without file checking...
+                    -------------------------------------------------
+                    Error: $statusCode
+                """.trimIndent(),true)
+                TimeUnit.SECONDS.sleep(2)
+                fadeOutExit(1,silent)
+            }
+        }
+        val manifestJson = response?.body().toString()
         val manifest = manifestJson.parseObject()
         val packName = manifest["name"]
         val packAuthor = manifest["author"]
@@ -118,12 +145,16 @@ $packDescription
                 """.trimIndent(),true)
         }
         TimeUnit.SECONDS.sleep(2)
-        if (!silent) {
-            JFrameInit.frameFadeOut()
-            frame.dispose()
-        } else {
-            exitProcess(0)
-        }
+        fadeOutExit(0,silent)
+    }
+}
+
+fun fadeOutExit(status: Int, silent: Boolean) {
+    if (!silent) {
+        JFrameInit.frameFadeOut()
+        exitProcess(status)
+    } else {
+        exitProcess(status)
     }
 }
 
