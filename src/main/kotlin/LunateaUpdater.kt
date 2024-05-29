@@ -101,7 +101,7 @@ fun main(args: Array<String>) = mainBody {
         val packAuthor = manifest["author"]
         val packVersion = manifest["version"]
         val packDescription = manifest["description"]
-        val addonsList = manifest["addons"].toString().parseArray()
+        val addonsList = manifest.getJSONArray("addons")
         outputConsole(
             """
 Pack Name: $packName
