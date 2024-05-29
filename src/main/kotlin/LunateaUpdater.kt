@@ -118,11 +118,11 @@ $packDescription
         }
         outputConsole("File checking start in 2 seconds...",true)
         TimeUnit.SECONDS.sleep(2)
-        val filesList = manifest["files"].toString().parseArray()
+        val filesList = manifest.getJSONArray("files")
         var checkStatus = true
         filesList.withIndex().forEach { (_, file) ->
             executorService.execute {   // 瞎整的多线程
-                if (!asyncFilesCheck(file, gamePath, updateUrl)) {
+                if (!asyncFilesCheck(file, fixPath(gamePath), updateUrl)) {
                     checkStatus = false
                 }
                 executorService.shutdown()
@@ -222,3 +222,6 @@ fun downloadFile(file: File, url: String): Boolean {
         return false
     }
 }
+
+// ArgParser返回的字段会把\"识别为内容的一部分，导致运行失败
+fun fixPath(originPath: String): String = originPath.replace(Regex("\"$"), "")
